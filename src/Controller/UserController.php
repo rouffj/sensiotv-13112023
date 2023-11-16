@@ -17,7 +17,7 @@ class UserController extends AbstractController
     public function register(Request $request, EntityManagerInterface $manager): Response
     {
         $user = new User();
-        $user->setFirstName('Elon');
+            $user->setFirstName('Elon');
         $user->setLastName('MUSK');
         $form = $this->createForm(UserType::class, $user);
 

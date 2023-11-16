@@ -23,11 +23,14 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('/contact/{reasonId}',
-        requirements: ['reasonId'=> '\d+'],
-        defaults: ['reasonId' => 17],
-        methods: 'GET',
-        name: 'titi')
+    #[
+        Route(
+            '/contact/{reasonId}',
+            requirements: ['reasonId' => '\d+'],
+            defaults: ['reasonId' => 17],
+            methods: 'GET',
+            name: 'titi'
+        )
     ]
     public function contact($reasonId)
     {
@@ -40,7 +43,8 @@ class DefaultController extends AbstractController
     #[Route('/movies/{id}')]
     public function movies_list($id, Request $request)
     {
-        dump($id, $request);die;
+        dump($id, $request);
+        die;
     }
 }
 

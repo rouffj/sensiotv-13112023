@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/movie')]
 class MovieController extends AbstractController
@@ -27,11 +26,11 @@ class MovieController extends AbstractController
     }
 
     #[Route('/search', name: 'movie_search')]
-    public function search(Request $request, HttpClientInterface $httpClient): Response
+    public function search(Request $request, OmdbApi $omdbApi): Response
     {
         $keyword = $request->query->get('keyword', 'Harry Potter');
         //$movies = file_get_contents('http://www.omdbapi.com/?apikey=28c5b7b1&s=Blue');
-        $omdbApi = new OmdbApi($httpClient, '28c5b7b1', 'https://www.omdbapi.com', '');
+        #$omdbApi = new OmdbApi($httpClient, '28c5b7b1', 'https://www.omdbapi.com', '');
         $movies = $omdbApi->requestAllBySearch($keyword);
         dump($keyword, $movies);
 
