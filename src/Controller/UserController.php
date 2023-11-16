@@ -12,10 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\UserAddedEvent;
+use App\Event\AppDomainEvents;
+
 class UserController extends AbstractController
 {
     #[Route('/register', name: 'user_register')]
-    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $passwordHasher, EventDispatcherInterface $eventDispatcher): Response
     {
         $user = new User();
         $user->setFirstName('Elon');
@@ -29,19 +33,15 @@ class UserController extends AbstractController
             $user->setPassword($hashedPassword);
             $manager->persist($user);
             $manager->flush();
+
+            $eventDispatcher->dispatch(new UserAddedEvent($user), AppDomainEvents::USER_ADDED);
             dump($user);
 
-            return $this->redirectToRoute('user_login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('user/register.html.twig', [
             'form' => $form,
         ]);
-    }
-
-    #[Route('/login', name: 'user_login')]
-    public function login(): Response
-    {
-        return $this->render('user/signin.html.twig');
     }
 }
